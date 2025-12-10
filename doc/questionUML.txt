@@ -26,3 +26,57 @@ Inconvénients :
 
 
 les fonctions ajoutées sont : dans la classe Agenda, nous avons ajouté findByTitle(String title) et isFreeFor(Event e). Dans la classe Event, nous avons ajouté la fonction utilitaire hasRepetition() et l'accesseur Repetition getRepetition(). Enfin, dans la classe Repetition, nous avons ajouté la fonction de vérification isException(LocalDate d) et l'accesseur public Termination getTermination().
+
+Modèle n°1 : Composition/Agrégation (Figure 2)
+Ce modèle utilise la composition, où la classe Event contient des objets (Repetition, Termination), au lieu de créer des sous-classes pour chaque type d’événement.
+Avantages :
+-on peut ajouter de nouvelles règles de répétition ou de fin sans toucher à la classe de base.
+-chaque classe (Repetition, Termination) gère sa logique propre, ce qui rend le code plus facile à maintenir.
+-tous les événements restent des objets de type Event, ce qui simplifie leur gestion dans une liste ou un agenda.
+
+Inconvénients :
+-La méthode isInDay() dans Event peut devenir très chargée, car elle doit vérifier toutes les conditions pour les répétitions, terminaisons et exceptions.
+-Certaines méthodes, comme setTermination(), sont accessibles à tous les événements, même ceux qui n’en ont pas besoin, ce qui peut créer de la confusion ou contrevenir au principe de responsabilité unique.
+
+
+2. Modèle n°2 : Héritage/Spécialisation (Figure 3)
+Ce modèle utilise l'héritage, où chaque mofication/changement de l'événement est une sous-classe spécialisée.
+Avantages :
+-chaque sous-classe ne contient que ce dont elle a besoin, ce qui rend son comportement facile à comprendre.
+-on peut redéfinir isInDay() dans chaque sous-classe, répartissant la logique plutôt que de tout concentrer dans Event.
+-on peut facilement manipuler un type d’événement particulier sans vérifier manuellement ses attributs.
+
+Inconvénients :
+-Pas trop flexible : chaque nouvelle combinaison de règles nécessite une nouvelle sous-classe, ce qui peut complexifier la hiérarchie.
+-Constructeurs compliqués : les appels à super() peuvent devenir longs ou répétitifs.
+-avec beaucoup de variations, la hiérarchie devient lourde et difficile à maintenir.
+
+
+les fonctions ajoutées sont : dans la classe Agenda, nous avons ajouté findByTitle(String title) et isFreeFor(Event e). Dans la classe Event, nous avons ajouté la fonction utilitaire hasRepetition() et l'accesseur Repetition getRepetition(). Enfin, dans la classe Repetition, nous avons ajouté la fonction de vérification isException(LocalDate d) et l'accesseur public Termination getTermination().
+
+Modèle n°1 : Composition/Agrégation (Figure 2)
+Ce modèle utilise la composition, où la classe Event contient des objets (Repetition, Termination), au lieu de créer des sous-classes pour chaque type d’événement.
+Avantages :
+-on peut ajouter de nouvelles règles de répétition ou de fin sans toucher à la classe de base.
+-chaque classe (Repetition, Termination) gère sa logique propre, ce qui rend le code plus facile à maintenir.
+-tous les événements restent des objets de type Event, ce qui simplifie leur gestion dans une liste ou un agenda.
+
+Inconvénients :
+-La méthode isInDay() dans Event peut devenir très chargée, car elle doit vérifier toutes les conditions pour les répétitions, terminaisons et exceptions.
+-Certaines méthodes, comme setTermination(), sont accessibles à tous les événements, même ceux qui n’en ont pas besoin, ce qui peut créer de la confusion ou contrevenir au principe de responsabilité unique.
+
+
+2. Modèle n°2 : Héritage/Spécialisation (Figure 3)
+Ce modèle utilise l'héritage, où chaque mofication/changement de l'événement est une sous-classe spécialisée.
+Avantages :
+-chaque sous-classe ne contient que ce dont elle a besoin, ce qui rend son comportement facile à comprendre.
+-on peut redéfinir isInDay() dans chaque sous-classe, répartissant la logique plutôt que de tout concentrer dans Event.
+-on peut facilement manipuler un type d’événement particulier sans vérifier manuellement ses attributs.
+
+Inconvénients :
+-Pas trop flexible : chaque nouvelle combinaison de règles nécessite une nouvelle sous-classe, ce qui peut complexifier la hiérarchie.
+-Constructeurs compliqués : les appels à super() peuvent devenir longs ou répétitifs.
+-avec beaucoup de variations, la hiérarchie devient lourde et difficile à maintenir.
+
+
+les fonctions ajoutées sont : dans la classe Agenda, nous avons ajouté findByTitle(String title) et isFreeFor(Event e). Dans la classe Event, nous avons ajouté la fonction utilitaire hasRepetition() et l'accesseur Repetition getRepetition(). Enfin, dans la classe Repetition, nous avons ajouté la fonction de vérification isException(LocalDate d) et l'accesseur public Termination getTermination().
