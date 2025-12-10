@@ -4,8 +4,11 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -70,5 +73,49 @@ public class AgendaTest {
                 "Il y a 4 événements ce jour là");
         assertTrue(agenda.eventsInDay(nov_1_2020).contains(neverEnding));
     }
+
+    @Test
+    public void testAddEvent() {
+    Event newEvent = new Event("New Event", LocalDateTime.now(), Duration.ofHours(1));
+    agenda.addEvent(newEvent);
+    assertTrue(agenda.eventsInDay(newEvent.getStart().toLocalDate()).contains(newEvent));
+}
+
+    @Test
+    public void testFindByTitle() {
+    List<Event> found = agenda.findByTitle("Simple event");
+    assertEquals(1, found.size());
+    assertTrue(found.contains(simple));
+
+    List<Event> notFound = agenda.findByTitle("Inexistant");
+    assertTrue(notFound.isEmpty());
+
+    List<Event> nullTitle = agenda.findByTitle(null);
+    assertTrue(nullTitle.isEmpty());
+    }
+
+    @Test
+    public void testIsFreeFor() {
+    // null => libre
+    assertTrue(agenda.isFreeFor(null));
+
+    // événement répétitif => exception
+    assertThrows(UnsupportedOperationException.class, () -> agenda.isFreeFor(neverEnding));
+
+    // chevauchement avec simple
+    Event overlap = new Event("Overlap", nov_1_2020_22_30.plusMinutes(30), Duration.ofMinutes(60));
+    assertFalse(agenda.isFreeFor(overlap));
+
+    // pas de chevauchement
+    Event freeEvent = new Event("Free", nov_1_2020_22_30.plusHours(3), Duration.ofMinutes(60));
+    assertTrue(agenda.isFreeFor(freeEvent));
+    }
+
+    @Test
+    public void testEventsInEmptyDay() {
+    Agenda emptyAgenda = new Agenda(); // agenda vide
+    LocalDate someDay = LocalDate.of(2025, 1, 1);
+    assertTrue(emptyAgenda.eventsInDay(someDay).isEmpty());
+}
 
 }
